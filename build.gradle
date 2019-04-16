@@ -1,0 +1,58 @@
+import jdk.internal.dynalink.linker.LinkerServices
+
+buildscript {
+    apply from: "https://apptik.io/props.gradle"
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+
+group GROUP
+version VERSION_NAME
+
+dependencies {
+    compile kotlin_stdlib_jdk8
+    compile "io.github.microutils:kotlin-logging:1.6.25"
+    compile "org.slf4j:slf4j-api:1.7.26"
+//    compile "org.slf4j:slf4j-simple:1.7.26"
+    compile "org.apache.logging.log4j:log4j-core:2.11.1"
+    compile "org.apache.logging.log4j:log4j-api:2.11.2"
+////    compile "org.apache.logging.log4j:log4j-slf4j18-impl:2.11.2"
+    compile "org.apache.logging.log4j:log4j-slf4j-impl:2.11.2"
+//    compile "org.apache.logging.log4j:log4j-to-slf4j:2.11.2"
+
+    compile vx_core
+    compile vx_rx_java2
+    compile vx_kotlin
+
+    testCompile "org.elasticsearch.client:elasticsearch-rest-client:6.6.2"
+//    compile "org.elasticsearch:elasticsearch:6.6.1"
+    testCompile "org.elasticsearch.client:elasticsearch-rest-high-level-client:6.6.2"
+    testCompile "org.testcontainers:elasticsearch:1.10.6"
+    testCompile vx_unit
+    
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.1'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+apply from: 'https://raw.githubusercontent.com/djodjoni/gradle-mvn-push/master/gradle-mvn-push.gradle'
